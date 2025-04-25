@@ -1,0 +1,31 @@
+
+.landing-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1f2937, #111827); 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+
+  .landing-btn {
+    width: 220px;
+    padding: 14px 24px;
+    margin: 12px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #f9fafb;
+    background-color: #2563eb; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .landing-btn:hover {
+    background-color: #1e40af; 
+    transform: translateY(-2px);
+  }
