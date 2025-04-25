@@ -2,6 +2,16 @@ import Student from "../models/student.model.js"
 import { generateToken } from "../lib/utils.js";
 import bcrypt from "bcryptjs"
 
+export const checkAuth = async (req, res) => {
+    try {
+      res.status(200).json(req.user);  // <- make sure req.user is being populated
+    } catch (error) {
+      console.log("error in checkauth: ", error.message);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+
 export const signup=async(req,res)=>{
     const {fullName,email,password}=req.body;
     try{
@@ -78,3 +88,4 @@ export const logout=(req,res)=>{
         res.status(500).json({message:"Internal Server error"})
     }
 }
+
