@@ -47,18 +47,13 @@ const App = () => {
     <div>
       <Navbar />
       <Routes>
-
-
         <Route path='/' element={<LandingPage />} />
-
         <Route path='/LoginPageStudent' element={!studentUser ? <LoginPageStudent /> : <Navigate to="/studentDash" />} />
         <Route path='/SignupPageStudent' element={!studentUser ? <SignupPageStudent /> : <Navigate to="/studentDash" />} />
         <Route path='/studentDash' element={studentUser ? <StudentDashboard /> : <Navigate to="/LoginPageStudent" />} />
-
-    
         <Route path='/LoginPageTeacher' element={!teacherUser ? <LoginPageTeacher /> : <Navigate to="/teacherDash" />} />
         <Route path='/SignupPageTeacher' element={!teacherUser ? <SignupPageTeacher /> : <Navigate to="/teacherDash" />} />
-        <Route path='/teacherDash' element={teacherUser ? <TeacherDashboard /> : <Navigate to="/LoginPageTeacher" />} />
+        <Route path='/teacherDash/*' element={teacherUser ? <TeacherDashboard /> : <Navigate to="/LoginPageTeacher" />} />
 
       </Routes>
       <Toaster />

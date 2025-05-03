@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
-import Student from "../models/student.model.js"
+import Teacher from "../models/teacher.model.js"
 
-export const protectSRoute=async(req,res,next)=>{
+export const protectTRoute=async(req,res,next)=>{
     try{
         const token=req.cookies.jwt
 
@@ -13,7 +13,7 @@ export const protectSRoute=async(req,res,next)=>{
         if(!decoded){
             return res.status(401).json({message:"Unauthorized-Invalid Token"})
         }
-        const user=await Student.findById(decoded.userId).select("-password");
+        const user=await Teacher.findById(decoded.userId).select("-password");
 
         if(!user){
             return res.status(401).json({message:"User not found"})
