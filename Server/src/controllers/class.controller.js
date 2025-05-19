@@ -41,7 +41,6 @@ export const createClass=async (req, res) => {
 export const getClass=async(req,res)=>{
     try {
         const teacherId = req.user._id;
-        console.log(teacherId)
     
         const classes = await Class.find({ createdBy: teacherId }).populate('students', 'fullName'); // Populate student names if necessary
     
@@ -63,3 +62,41 @@ export const getClass=async(req,res)=>{
         return res.status(500).json({ message: "Internal Server Error" });
       }
 }
+
+
+export const joinClass = async (req, res) => {
+  const { classCode } = req.body;
+  const studentId = req.user._id;
+
+  if (!classCode) return res.status(400).json({ message: "Class code is required" });
+
+  try {
+    const foundClass = await Class.findOne({ classCode });
+    if (!foundClass) return res.status(404).json({ message: "Class not found" });
+
+    const alreadyJoined = foundClass.students.includes(studentId);
+    if (alreadyJoined) return res.status(400).json({ message: "Already enrolled in this class" });
+
+    foundClass.students.push(studentId);
+    await foundClass.save();
+
+    return res.status(200).json({ message: "Successfully joined the class" });
+  } catch (err) {
+    console.error("Join class error:", err.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getStudentClasses = async (req, res) => {
+    try {
+      const studentId = req.user._id;
+  
+      const classes = await Class.find({ students: studentId }).populate('createdBy', 'fullName');
+  
+      return res.status(200).json({ classes });
+    } catch (err) {
+      console.error("Error fetching student classes:", err.message);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+  

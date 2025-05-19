@@ -10,7 +10,7 @@ const TeacherDashboard = () => {
     <div className='flex pt-16 h-screen'>
       <Sidebar/>
 
-      <div className="flex-1 overflow-y-auto p-6 bg-gray-100">
+      <div className="flex-1 overflow-y-auto p-6 bg-red-400">
         <Routes>
           <Route path="/" element={<Navigate to="classes" />} />
           <Route path="classes" element={<TeacherClassPage />} />
