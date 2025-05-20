@@ -11,6 +11,8 @@ import Navbar from './components/Navbar.jsx'
 
 import { useSAuthStore } from './store/useSAuthStore.js'
 import { useTAuthStore } from './store/useTAuthStore.js'
+import SClassDetails from './pages/SClassDetails.jsx'
+import TClassDetails from './pages/TClassDetails.jsx'
 
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
@@ -53,7 +55,9 @@ const App = () => {
         <Route path='/studentDash' element={studentUser ? <StudentDashboard /> : <Navigate to="/LoginPageStudent" />} />
         <Route path='/LoginPageTeacher' element={!teacherUser ? <LoginPageTeacher /> : <Navigate to="/teacherDash" />} />
         <Route path='/SignupPageTeacher' element={!teacherUser ? <SignupPageTeacher /> : <Navigate to="/teacherDash" />} />
-        <Route path='/teacherDash/*' element={teacherUser ? <TeacherDashboard /> : <Navigate to="/LoginPageTeacher" />} />
+        <Route path='/teacherDash' element={teacherUser ? <TeacherDashboard /> : <Navigate to="/LoginPageTeacher" />} />
+        <Route path="/class/student/:classCode/*" element={<SClassDetails />} />
+        <Route path="/class/teacher/:classCode/*" element={<TClassDetails />} />
 
       </Routes>
       <Toaster />

@@ -3,7 +3,14 @@ import { axiosInstance } from '../lib/axios';
 import { toast } from 'react-hot-toast';
 import { Plus, X } from 'lucide-react';
 
+import { useNavigate } from 'react-router-dom';
+
+
+
 const StudentDashboard = () => {
+
+  const navigate = useNavigate();
+
   const [classes, setClasses] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [classCode, setClassCode] = useState('');
@@ -89,13 +96,17 @@ const StudentDashboard = () => {
       <h3 className="text-xl font-semibold mb-4 text-black">Enrolled Classes</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {classes.map((cls) => (
-          <div key={cls._id} className="bg-black border rounded-lg shadow p-4 hover:shadow-lg transition">
+          <div key={cls._id} 
+          onClick={() => navigate(`/class/student/${cls.classCode}`)} 
+          className="bg-black border rounded-lg shadow p-4 hover:shadow-lg transition">
             <h4 className="text-lg font-bold mb-2">{cls.name}</h4>
             <p><span className="font-medium">Subject:</span> {cls.subject}</p>
             <p><span className="font-medium">Class Code:</span> {cls.classCode}</p>
             <p><span className="font-medium">Teacher:</span> {cls.createdBy?.fullName || 'Unknown'}</p>
           </div>
         ))}
+
+
       </div>
     </div>
   );

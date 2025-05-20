@@ -9,11 +9,13 @@ const Navbar = () => {
     const { logout: studentLogout, authUser: studentAuthUser } = useSAuthStore();
     const { logout: teacherLogout, authUser: teacherAuthUser } = useTAuthStore();
     const navigate = useNavigate();
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (studentAuthUser) {
-            studentLogout();
+            await studentLogout();
+            navigate('/LoginPageStudent'); 
         } else if (teacherAuthUser) {
-            teacherLogout();
+            await teacherLogout();
+            navigate('/LoginPageTeacher'); 
         }
     };
 
