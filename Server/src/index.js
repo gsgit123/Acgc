@@ -6,6 +6,7 @@ import tauthRoutes from "./routes/tauth.route.js"
 import classRoutes from "./routes/class.route.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
+import attendanceRoutes from './routes/attendance.route.js';
 
 
 
@@ -27,6 +28,7 @@ app.use(cors({
 app.use("/api/sauth",sauthRoutes)
 app.use("/api/tauth",tauthRoutes)
 app.use("/api/class",classRoutes)
+app.use('/api/attendance', attendanceRoutes);
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
