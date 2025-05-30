@@ -16,6 +16,11 @@ const teacherSchema=new mongoose.Schema(
             required:true,
             minlength:6,
         },
+        role: {
+            type: String,
+            default: "Teacher", 
+            immutable: true,
+        },
     },
     {
         timestamps:true

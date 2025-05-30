@@ -11,7 +11,11 @@ export const useTAuthStore = create((set, get) => ({
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get("/tauth/check");
-      set({ authUser: res.data });
+      if (res?.data) {
+        set({ authUser: { ...res.data, role: "teacher" } });
+      } else {
+        set({ authUser: null });
+      }
     } catch (error) {
       set({ authUser: null });
       console.error("Error in teacher checkAuth:", error);
@@ -25,7 +29,7 @@ export const useTAuthStore = create((set, get) => ({
     try {
       const res = await axiosInstance.post("/tauth/signup", data);
       if (res?.data) {
-        set({ authUser: res.data });
+        set({ authUser: { ...res.data, role: "teacher" } });
         toast.success("Teacher account created!");
       }
     } catch (error) {
@@ -39,8 +43,10 @@ export const useTAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/tauth/login", data);
-      set({ authUser: res.data });
-      toast.success("Teacher logged in!");
+      if (res?.data) {
+        set({ authUser: { ...res.data, role: "teacher" } });
+        toast.success("Teacher logged in!");
+      }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Login failed");
     } finally {
