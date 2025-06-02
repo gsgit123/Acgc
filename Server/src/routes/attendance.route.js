@@ -37,4 +37,17 @@ router.post('/class/:classId/date/:date', async (req, res) => {
   }
 });
 
+router.get('/summary/:classId/:studentId', async (req, res) => {
+  const { classId, studentId } = req.params;
+  try {
+    const daysPresent = await Attendance.countDocuments({ class: classId, student: studentId, status: 'present' });
+    const totalDays = await Attendance.countDocuments({ class: classId, student: studentId });
+
+    res.json({ daysPresent, totalDays });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch attendance summary' });
+  }
+});
+
+
 export default router;

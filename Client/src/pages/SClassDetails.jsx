@@ -51,12 +51,14 @@ import ClassSidebar from '../components/SSidebar';
 import ClassInfo from '../s_class_components/Info';
 import ClassChat from '../s_class_components/Chat';
 import ClassAttendance from '../s_class_components/Attendance';
+import { useSAuthStore } from "../store/useSAuthStore";
 
 
 const ClassDetails = () => {
   const { classCode } = useParams();
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const currentUser = useSAuthStore((state) => state.authUser);
 
   const fetchClassDetails = async () => {
     try {
@@ -85,7 +87,7 @@ const ClassDetails = () => {
           <Route path="/" element={<Navigate to="info" />} />
           <Route path="info" element={<ClassInfo classData={classData} />} />
           <Route path="chat" element={<ClassChat classData={classData} />} />
-          <Route path="attendance" element={<ClassAttendance classData={classData} />} />
+          <Route path="attendance" element={<ClassAttendance classId={classData._id} studentId={currentUser._id}/>} />
         </Routes>
       </div>
     </div>
