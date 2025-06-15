@@ -1,31 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 
 .landing-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #1f2937, #111827); 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b0f19;
+  font-family: 'Nunito', sans-serif;
+  color: #f1f5f9;
+  animation: fadeIn 0.8s ease-in;
+}
 
-  .landing-btn {
-    width: 220px;
-    padding: 14px 24px;
-    margin: 12px 0;
-    font-size: 16px;
-    font-weight: 500;
-    color: #f9fafb;
-    background-color: #2563eb; 
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.button-row {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.landing-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 240px;
+  height: 80px;
+  padding: 16px 32px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f8fafc;
+  background-color: #38bdf8;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 16px rgba(56, 189, 248, 0.4);
+}
+
+.landing-btn:hover {
+  background-color: #0ea5e9;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.5);
+}
+
+.icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Animations */
+.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  
-  .landing-btn:hover {
-    background-color: #1e40af; 
-    transform: translateY(-2px);
-  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

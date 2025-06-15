@@ -5,29 +5,35 @@ const TClassSidebar = () => {
   const location = useLocation();
   const { classCode } = useParams();
 
-  return (
-    <div className="w-64 bg-gray-900 text-white p-6 space-y-4">
-      <h2 className="text-xl font-bold mb-6">Class Panel</h2>
+  const navItems = [
+    { name: 'Info', path: 'info' },
+    { name: 'Chat', path: 'chat' },
+    { name: 'Attendance', path: 'attendance' },
+  ];
 
-      <Link
-        to={`/class/teacher/${classCode}/info`}
-        className={`block p-3 rounded hover:bg-gray-800 ${location.pathname.endsWith("/info") ? "bg-gray-700" : ""}`}
-      >
-        Info
-      </Link>
-      <Link
-        to={`/class/teacher/${classCode}/chat`}
-        className={`block p-3 rounded hover:bg-gray-800 ${location.pathname.endsWith("/chat") ? "bg-gray-700" : ""}`}
-      >
-        Chat
-      </Link>
-      <Link
-        to={`/class/teacher/${classCode}/attendance`}
-        className={`block p-3 rounded hover:bg-gray-800 ${location.pathname.endsWith("/attendance") ? "bg-gray-700" : ""}`}
-      >
-        Attendance
-      </Link>
-    </div>
+  return (
+    <aside className="w-64 min-h-screen bg-[#1f2937] text-[#f9fafb] p-6 font-['Nunito'] shadow-lg border-r border-[#374151]">
+      <h2 className="text-2xl font-bold mb-8 tracking-wide text-sky-400">Class Panel</h2>
+
+      <nav className="space-y-3">
+        {navItems.map((item) => {
+          const isActive = location.pathname.endsWith(item.path);
+          return (
+            <Link
+              key={item.name}
+              to={`/class/teacher/${classCode}/${item.path}`}
+              className={`block px-4 py-3 rounded-lg transition-colors duration-200 ${
+                isActive
+                  ? 'bg-[#2563eb] text-white shadow'
+                  : 'hover:bg-[#374151] hover:text-sky-300'
+              }`}
+            >
+              {item.name}
+            </Link>
+          );
+        })}
+      </nav>
+    </aside>
   );
 };
 
