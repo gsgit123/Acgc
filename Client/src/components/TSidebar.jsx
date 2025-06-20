@@ -12,8 +12,10 @@ const TClassSidebar = () => {
   ];
 
   return (
-    <aside className="w-64 min-h-screen bg-[#1f2937] text-[#f9fafb] p-6 font-['Nunito'] shadow-lg border-r border-[#374151]">
-      <h2 className="text-2xl font-bold mb-8 tracking-wide text-sky-400">Class Panel</h2>
+    <aside className="w-64 min-h-screen bg-[#1c2c55] text-white p-6 font-['Nunito'] border-r border-[#1f2937] shadow-2xl">
+      <h2 className="text-2xl font-bold mb-8 tracking-wide text-sky-400 text-center">
+        Class Panel 🎓
+      </h2>
 
       <nav className="space-y-3">
         {navItems.map((item) => {
@@ -22,10 +24,10 @@ const TClassSidebar = () => {
             <Link
               key={item.name}
               to={`/class/teacher/${classCode}/${item.path}`}
-              className={`block px-4 py-3 rounded-lg transition-colors duration-200 ${
+              className={`block px-5 py-3 rounded-lg font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-[#2563eb] text-white shadow'
-                  : 'hover:bg-[#374151] hover:text-sky-300'
+                  ? 'bg-sky-600 text-white shadow-md scale-[1.02]'
+                  : 'hover:bg-[#1e293b] hover:text-sky-300 text-gray-200'
               }`}
             >
               {item.name}

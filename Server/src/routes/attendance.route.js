@@ -6,6 +6,42 @@ import Student from '../models/student.model.js';
 const router = express.Router();
 
 
+router.get('/class/:classCode/students', async (req, res) => {
+  try {
+    const { classCode } = req.params;
+    const classData = await Class.findOne({ classCode }).populate('students', 'fullName email');
+
+    if (!classData) {
+      return res.status(404).json({ message: 'Class not found' });
+    }
+
+    const studentsWithAttendance = await Promise.all(
+      classData.students.map(async (student) => {
+        const totalDays = await Attendance.countDocuments({ class: classData._id, student: student._id });
+        const daysPresent = await Attendance.countDocuments({ class: classData._id, student: student._id, status: 'present' });
+        const attendancePercentage = totalDays > 0 ? ((daysPresent / totalDays) * 100).toFixed(2) : 'N/A';
+
+        return {
+          _id: student._id,
+          fullName: student.fullName,
+          email: student.email,
+          totalDays,
+          daysPresent,
+          attendancePercentage
+        };
+      })
+    );
+
+    res.json({ students: studentsWithAttendance });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch students' });
+  }
+});
+
+
+
 router.get('/class/:classId/date/:date', async (req, res) => {
   try {
     const { classId, date } = req.params;
@@ -48,6 +84,8 @@ router.get('/summary/:classId/:studentId', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch attendance summary' });
   }
 });
+
+
 
 
 export default router;

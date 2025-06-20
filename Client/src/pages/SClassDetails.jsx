@@ -1,46 +1,4 @@
-// // src/pages/ClassDetails.jsx
-// import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { axiosInstance } from '../lib/axios';
-// import { toast } from 'react-hot-toast';
 
-// const ClassDetails = () => {
-//   const { classCode } = useParams();
-//   const [classData, setClassData] = useState(null);
-//   const [loading, setLoading] = useState(true);
-
-//   const fetchClassDetails = async () => {
-//     try {
-//       const response = await axiosInstance.get(`/class/code/${classCode}`);
-//       setClassData(response.data.class);
-//       console.log(response.data);
-//     } catch (error) {
-//       toast.error(error.response?.data?.message || "Failed to load class details");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-// // console.log(classData);
-//   useEffect(() => {
-//     fetchClassDetails();
-//   }, [classCode]);
-
-//   if (loading) return <div className="p-6 text-center">Loading...</div>;
-//   if (!classData) return <div className="p-6 text-center text-red-600">Class not found</div>;
-
-//   return (
-//     <div className="max-w-4xl mx-auto p-6">
-//       <h1 className="text-3xl font-bold mb-4">{classData.name}</h1>
-//       <p><strong>Student</strong></p>
-//       <p><strong>Subject:</strong> {classData.subject}</p>
-//       <p><strong>Class Code:</strong> {classData.classCode}</p>
-//       <p><strong>Teacher:</strong> {classData.createdBy?.fullName || 'Unknown'}</p>
-
-//     </div>
-//   );
-// };
-
-// export default ClassDetails;
 
 
 import React, { useEffect, useState } from 'react';
@@ -79,15 +37,19 @@ const ClassDetails = () => {
   if (!classData) return <div className="p-6 text-center text-red-600">Class not found</div>;
 
   return (
-    <div className="flex min-h-screen">
-      <ClassSidebar />
+    <div className="h-[calc(100vh-4rem)] flex">
+      {/* Sidebar */}
+      <div className="w-64 h-full fixed top-16 left-0 z-30 bg-[#1c2c55] border-r border-gray-700">
+        <ClassSidebar />
+      </div>
 
-      <div className="flex-1 p-6 overflow-y-auto">
+      {/* Scrollable content area */}
+      <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
         <Routes>
           <Route path="/" element={<Navigate to="info" />} />
           <Route path="info" element={<ClassInfo classData={classData} />} />
           <Route path="chat" element={<ClassChat classData={classData} />} />
-          <Route path="attendance" element={<ClassAttendance classId={classData._id} studentId={currentUser._id}/>} />
+          <Route path="attendance" element={<ClassAttendance classId={classData._id} studentId={currentUser._id} />} />
         </Routes>
       </div>
     </div>

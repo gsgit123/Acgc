@@ -32,13 +32,17 @@ const ClassDetails = () => {
   if (!classData) return <div className="p-6 text-center text-red-600">Class not found</div>;
 
   return (
-    <div className="flex min-h-screen">
-      <ClassSidebar />
+    <div className=" h-[calc(100vh-4rem)] flex">
+      {/* Sidebar */}
+      <div className="w-64 h-full fixed top-16 left-0 z-30 bg-[#1c2c55] border-r border-gray-700">
+        <ClassSidebar />
+      </div>
 
-      <div className="flex-1 p-6 overflow-y-auto">
+      {/* Scrollable content area */}
+      <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
         <Routes>
           <Route path="/" element={<Navigate to="info" />} />
-          <Route path="info" element={<ClassInfo classData={classData} />} />
+          <Route path="info" element={<ClassInfo />} />
           <Route path="chat" element={<ClassChat classData={classData} />} />
           <Route path="attendance" element={<ClassAttendance classData={classData} />} />
         </Routes>

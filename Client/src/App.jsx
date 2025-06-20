@@ -75,21 +75,26 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Navbar />
-      <Routes>
-        <Route path='/' element={<LandingPage />} />
-        <Route path='/LoginPageStudent' element={!studentUser ? <LoginPageStudent /> : <Navigate to='/studentDash' />} />
-        <Route path='/SignupPageStudent' element={!studentUser ? <SignupPageStudent /> : <Navigate to='/studentDash' />} />
-        <Route path='/studentDash' element={studentUser ? <StudentDashboard /> : <Navigate to='/LoginPageStudent' />} />
-        <Route path='/LoginPageTeacher' element={!teacherUser ? <LoginPageTeacher /> : <Navigate to='/teacherDash' />} />
-        <Route path='/SignupPageTeacher' element={!teacherUser ? <SignupPageTeacher /> : <Navigate to='/teacherDash' />} />
-        <Route path='/teacherDash' element={teacherUser ? <TeacherDashboard /> : <Navigate to='/LoginPageTeacher' />} />
-        <Route path='/class/student/:classCode/*' element={studentUser ? <SClassDetails /> : <Navigate to='/LoginPageStudent' />} />
-        <Route path='/class/teacher/:classCode/*' element={teacherUser ? <TClassDetails /> : <Navigate to='/LoginPageTeacher' />} />
-      </Routes>
-      <Toaster />
-    </div>
+    <div className="bg-[#0b0f19] min-h-screen text-white font-['Nunito'] pt-16">
+  <Navbar />
+  
+  <div className="px-4">
+    <Routes>
+      <Route path='/' element={<LandingPage />} />
+      <Route path='/LoginPageStudent' element={!studentUser ? <LoginPageStudent /> : <Navigate to='/studentDash' />} />
+      <Route path='/SignupPageStudent' element={!studentUser ? <SignupPageStudent /> : <Navigate to='/studentDash' />} />
+      <Route path='/studentDash' element={studentUser ? <StudentDashboard /> : <Navigate to='/LoginPageStudent' />} />
+      <Route path='/LoginPageTeacher' element={!teacherUser ? <LoginPageTeacher /> : <Navigate to='/teacherDash' />} />
+      <Route path='/SignupPageTeacher' element={!teacherUser ? <SignupPageTeacher /> : <Navigate to='/teacherDash' />} />
+      <Route path='/teacherDash' element={teacherUser ? <TeacherDashboard /> : <Navigate to='/LoginPageTeacher' />} />
+      <Route path='/class/student/:classCode/*' element={studentUser ? <SClassDetails /> : <Navigate to='/LoginPageStudent' />} />
+      <Route path='/class/teacher/:classCode/*' element={teacherUser ? <TClassDetails /> : <Navigate to='/LoginPageTeacher' />} />
+    </Routes>
+  </div>
+
+  <Toaster />
+</div>
+
   )
 }
 

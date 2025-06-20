@@ -9,12 +9,10 @@ const ClassAttendance = ({ classData }) => {
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch attendance for selected date
   const fetchAttendance = async () => {
     setLoading(true);
     try {
       const res = await axiosInstance.get(`/attendance/class/${classData._id}/date/${date}`);
-      // If no records, initialize all as 'present'
       if (res.data.attendance.length === 0) {
         setAttendance(
           classData.students.map(student => ({
@@ -68,57 +66,73 @@ const ClassAttendance = ({ classData }) => {
   };
 
   return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Attendance</h2>
-      <label>
-        Date:{' '}
-        <input
-          type="date"
-          value={date}
-          onChange={e => setDate(e.target.value)}
-          className="border p-1 rounded"
-        />
-      </label>
-      <table className="table-auto w-full mt-4">
-        <thead>
-          <tr>
-            <th className="px-2 py-1">Name</th>
-            <th className="px-2 py-1">Present</th>
-            <th className="px-2 py-1">Absent</th>
-          </tr>
-        </thead>
-        <tbody>
-          {attendance.map(student => (
-            <tr key={student.studentId}>
-              <td className="border px-2 py-1">{student.fullName}</td>
-              <td className="border px-2 py-1 text-center">
-                <input
-                  type="radio"
-                  checked={student.status === 'present'}
-                  onChange={() => handleStatusChange(student.studentId, 'present')}
-                />
-              </td>
-              <td className="border px-2 py-1 text-center">
-                <input
-                  type="radio"
-                  checked={student.status === 'absent'}
-                  onChange={() => handleStatusChange(student.studentId, 'absent')}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <button
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
-        onClick={handleSave}
-        disabled={loading}
-      >
-        {loading ? 'Saving...' : 'Save Attendance'}
-      </button>
+    <div className="pt-6 px-4 min-h-full bg-[#0b0f19] text-white font-['Nunito']">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-sky-400 text-center">Class Attendance 📅</h2>
+
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+          <label className="text-lg font-medium">
+            Select Date:{" "}
+            <input
+              type="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+              className="ml-2 bg-[#1e293b] border border-gray-700 text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-sky-500"
+            />
+          </label>
+        </div>
+
+        <div className="overflow-x-auto bg-[#1e293b] border border-gray-700 rounded-lg">
+          <table className="min-w-full text-sm text-left">
+            <thead className="bg-[#0f172a] text-gray-300 sticky top-0">
+              <tr>
+                <th className="px-4 py-3">Student Name</th>
+                <th className="px-4 py-3 text-center">Present</th>
+                <th className="px-4 py-3 text-center">Absent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {attendance.map(student => (
+                <tr key={student.studentId} className="border-t border-gray-700">
+                  <td className="px-4 py-3">{student.fullName}</td>
+                  <td className="px-4 py-3 text-center">
+                    <input
+                      type="radio"
+                      checked={student.status === 'present'}
+                      onChange={() => handleStatusChange(student.studentId, 'present')}
+                      className="accent-green-500"
+                    />
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    <input
+                      type="radio"
+                      checked={student.status === 'absent'}
+                      onChange={() => handleStatusChange(student.studentId, 'absent')}
+                      className="accent-red-500"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="text-center mt-6">
+          <button
+            className={`px-6 py-2 rounded-md font-semibold transition ${
+              loading
+                ? 'bg-gray-500 cursor-not-allowed'
+                : 'bg-sky-600 hover:bg-sky-700 text-white'
+            }`}
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading ? 'Saving...' : 'Save Attendance'}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default ClassAttendance;
-
