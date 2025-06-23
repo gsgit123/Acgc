@@ -10,6 +10,7 @@ import ClassInfo from '../s_class_components/Info';
 import ClassChat from '../s_class_components/Chat';
 import ClassAttendance from '../s_class_components/Attendance';
 import { useSAuthStore } from "../store/useSAuthStore";
+import AssignmentList from '../s_class_components/AssignmentList';
 
 
 const ClassDetails = () => {
@@ -50,6 +51,7 @@ const ClassDetails = () => {
           <Route path="info" element={<ClassInfo classData={classData} />} />
           <Route path="chat" element={<ClassChat classData={classData} />} />
           <Route path="attendance" element={<ClassAttendance classId={classData._id} studentId={currentUser._id} />} />
+          <Route path="assignment" element={<AssignmentList/>}/>
         </Routes>
       </div>
     </div>

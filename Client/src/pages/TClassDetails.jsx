@@ -6,6 +6,7 @@ import ClassSidebar from '../components/TSidebar';
 import ClassInfo from '../t_class_components/Info';
 import ClassChat from '../t_class_components/Chat';
 import ClassAttendance from '../t_class_components/Attendance';
+import AssignmentUpload from '../t_class_components/AssignmentUpload';
 
 
 const ClassDetails = () => {
@@ -45,6 +46,7 @@ const ClassDetails = () => {
           <Route path="info" element={<ClassInfo />} />
           <Route path="chat" element={<ClassChat classData={classData} />} />
           <Route path="attendance" element={<ClassAttendance classData={classData} />} />
+          <Route path="assignment" element={<AssignmentUpload/>}/>
         </Routes>
       </div>
     </div>

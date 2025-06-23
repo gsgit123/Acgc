@@ -8,6 +8,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import attendanceRoutes from './routes/attendance.route.js';
 import chatRoutes from "./routes/chat.route.js"
+import AssignmentRoutes from "./routes/assignment.route.js"
 
 
 
@@ -31,6 +32,7 @@ app.use("/api/tauth",tauthRoutes)
 app.use("/api/class",classRoutes)
 app.use('/api/attendance', attendanceRoutes);
 app.use("/api/chat",chatRoutes);
+app.use("/api/assignments",AssignmentRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);

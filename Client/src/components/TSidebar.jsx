@@ -9,6 +9,7 @@ const TClassSidebar = () => {
     { name: 'Info', path: 'info' },
     { name: 'Chat', path: 'chat' },
     { name: 'Attendance', path: 'attendance' },
+    { name: 'Assignment', path: 'assignment' },
   ];
 
   return (
