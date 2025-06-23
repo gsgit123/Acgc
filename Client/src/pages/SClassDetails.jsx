@@ -23,6 +23,7 @@ const ClassDetails = () => {
     try {
       const response = await axiosInstance.get(`/class/code/${classCode}`);
       setClassData(response.data.class);
+      console.log(currentUser._id);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to load class details");
     } finally {
@@ -48,7 +49,7 @@ const ClassDetails = () => {
       <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
         <Routes>
           <Route path="/" element={<Navigate to="info" />} />
-          <Route path="info" element={<ClassInfo classData={classData} />} />
+          <Route path="info" element={<ClassInfo classData={classData} studentId={currentUser._id} />} />
           <Route path="chat" element={<ClassChat classData={classData} />} />
           <Route path="attendance" element={<ClassAttendance classId={classData._id} studentId={currentUser._id} />} />
           <Route path="assignment" element={<AssignmentList/>}/>

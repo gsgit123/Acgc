@@ -64,4 +64,35 @@ router.delete('/:assignmentId',async(req,res)=>{
   }
 })
 
+// Route: Get pending assignments for a student in a class
+router.get('/pending/:classCode/:studentId', async (req, res) => {
+  const { classCode, studentId } = req.params;
+
+  try {
+    // Get all assignments for the class
+    const allAssignments = await Assignment.find({ classCode });
+
+    // Get all submissions by the student
+    const submissions = await Submission.find({ studentId });
+
+    // Create a Set of submitted assignment IDs
+    const submittedAssignmentIds = new Set(
+      submissions.map((s) => s.assignmentId.toString())
+    );
+
+    // Filter out assignments that the student hasn't submitted
+    const pendingAssignments = allAssignments.filter(
+      (assignment) => !submittedAssignmentIds.has(assignment._id.toString())
+    );
+
+    res.status(200).json({
+      count: pendingAssignments.length,
+      assignments: pendingAssignments, // You can remove this if you only need the count
+    });
+  } catch (error) {
+    console.error('Error fetching pending assignments:', error);
+    res.status(500).json({ error: 'Failed to fetch pending assignments' });
+  }
+});
+
 export default router;
