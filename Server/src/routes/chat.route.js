@@ -1,6 +1,5 @@
 import express from 'express';
 import Message from '../models/message.model.js';
-import Class from '../models/class.model.js';
 import Teacher from '../models/teacher.model.js';
 import Student from '../models/student.model.js';
 

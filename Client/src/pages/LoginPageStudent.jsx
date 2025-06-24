@@ -25,7 +25,7 @@ const LoginPage = () => {
 
   return (
     <div
-      className={`h-screen bg-[#0b0f19] flex items-center justify-center transition-opacity duration-700 ease-in-out ${
+      className={`min-h-[calc(100vh-64px)] bg-[#0b0f19] flex items-center justify-center transition-opacity duration-700 ease-in-out ${
         fadeIn ? "opacity-100" : "opacity-0"
       }`}
     >

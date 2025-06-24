@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
 
 .landing-container {
-  height: 100vh;
+  min-height: calc(100vh - 64px);
   display: flex;
   justify-content: center;
   align-items: center;

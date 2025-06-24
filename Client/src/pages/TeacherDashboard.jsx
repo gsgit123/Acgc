@@ -46,7 +46,7 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <div className="relative p-6 max-w-7xl mx-auto text-white font-['Nunito'] min-h-screen bg-[#0b0f19] pt-10">
+    <div className="relative p-6  max-w-7xl mx-auto text-white font-['Nunito'] min-h-[calc(100vh-64px)]  bg-[#0b0f19] pt-5">
 
       {!showForm && (
         <button

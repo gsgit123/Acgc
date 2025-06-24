@@ -23,7 +23,6 @@ const ClassDetails = () => {
     try {
       const response = await axiosInstance.get(`/class/code/${classCode}`);
       setClassData(response.data.class);
-      console.log(currentUser._id);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to load class details");
     } finally {
