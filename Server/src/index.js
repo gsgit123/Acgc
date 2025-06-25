@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser"
 import attendanceRoutes from './routes/attendance.route.js';
 import chatRoutes from "./routes/chat.route.js"
 import AssignmentRoutes from "./routes/assignment.route.js"
+import path from "path"
 
 
 
