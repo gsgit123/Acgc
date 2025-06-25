@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { ClassContext } from '../pages/SClassDetails'; // <-- import the context
+import { axiosInstance } from '../lib/axios';
 
 const ClassInfo = () => {
   const { classData, studentId } = useContext(ClassContext); // ✅ get data from context
@@ -12,7 +13,7 @@ const ClassInfo = () => {
     const fetchPendingAssignments = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5001/api/assignments/pending/${classData.classCode}/${studentId}`
+          `/assignments/pending/${classData.classCode}/${studentId}`
         );
         setPendingCount(res.data.count);
       } catch (err) {
