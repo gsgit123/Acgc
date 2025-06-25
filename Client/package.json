@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "acgc": "file:..",
     "axios": "^1.9.0",
     "framer-motion": "^12.18.1",
     "lucide-react": "^0.503.0",
