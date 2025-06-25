@@ -9,10 +9,12 @@ import cookieParser from "cookie-parser"
 import attendanceRoutes from './routes/attendance.route.js';
 import chatRoutes from "./routes/chat.route.js"
 import AssignmentRoutes from "./routes/assignment.route.js"
+import { fileURLToPath } from 'url';
 import path from "path"
 
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app=express();
 dotenv.config()
 
