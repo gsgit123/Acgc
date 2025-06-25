@@ -1,14 +1,14 @@
 import express from "express"
 import dotenv from "dotenv"
-import {connectDB} from "./lib/db.js"
-import sauthRoutes from "./routes/sauth.route.js"
-import tauthRoutes from "./routes/tauth.route.js"
-import classRoutes from "./routes/class.route.js"
+import {connectDB} from "./src/lib/db.js"
+import sauthRoutes from "./src/routes/sauth.route.js"
+import tauthRoutes from "./src/routes/tauth.route.js"
+import classRoutes from "./src/routes/class.route.js"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import attendanceRoutes from './routes/attendance.route.js';
-import chatRoutes from "./routes/chat.route.js"
-import AssignmentRoutes from "./routes/assignment.route.js"
+import attendanceRoutes from './src/routes/attendance.route.js';
+import chatRoutes from "./src/routes/chat.route.js"
+import AssignmentRoutes from "./src/routes/assignment.route.js"
 import { fileURLToPath } from 'url';
 import path from "path"
 
