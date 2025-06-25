@@ -24,10 +24,16 @@ const PORT=process.env.PORT
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser())
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://acgc-nu.vercel.app"
+];
+
 app.use(cors({
-    origin:'http://localhost:5173',
-    credentials:true,
-}))
+  origin: allowedOrigins,
+  credentials: true,
+}));
 
 
 app.use("/api/sauth", sauthRoutes);
