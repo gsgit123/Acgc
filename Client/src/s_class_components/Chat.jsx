@@ -1,25 +1,23 @@
-import { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
-
+import { useEffect, useState, useRef, useContext } from "react";
 import { useChatStore } from "../store/useChatStore";
-import { useSAuthStore } from "../store/useSAuthStore";
+import { ClassContext } from "../pages/SClassDetails";
 
 const Chat = () => {
+  const { classData, studentId } = useContext(ClassContext);
   const { messages, fetchMessages, sendMessage, isLoadingMessages } = useChatStore();
-  const { classCode } = useParams();
-  const currentUser = useSAuthStore((state) => state.authUser);
+
   const [text, setText] = useState("");
   const messagesEndRef = useRef(null);
 
-  if (!currentUser) {
+  if (!studentId) {
     return <div className="text-center p-4">Loading user info...</div>;
   }
 
   useEffect(() => {
-    if (classCode) {
-      fetchMessages(classCode);
+    if (classData?.classCode) {
+      fetchMessages(classData.classCode);
     }
-  }, [classCode, fetchMessages]);
+  }, [classData?.classCode, fetchMessages]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -29,15 +27,14 @@ const Chat = () => {
     if (!text.trim()) return;
 
     const messageData = {
-      senderId: currentUser._id,
-      senderModel: currentUser.role === "teacher" ? "Teacher" : "Student",
+      senderId: studentId,
+      senderModel: "Student",
       content: text,
     };
 
-    sendMessage(classCode, messageData);
+    sendMessage(classData.classCode, messageData);
     setText("");
   };
-
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") handleSend();
@@ -60,8 +57,7 @@ const Chat = () => {
             <div className="text-center text-gray-400">No messages yet.</div>
           ) : (
             messages.map((msg, idx) => {
-              const senderId = msg.sender;
-              const isSelf = senderId === currentUser._id;
+              const isSelf = msg.sender === studentId;
               const isTeacher = msg.senderModel === "Teacher";
 
               return (

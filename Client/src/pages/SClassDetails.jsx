@@ -1,19 +1,15 @@
-
-
-
 import React, { useEffect, useState } from 'react';
-import { useParams, Routes, Route, Navigate } from 'react-router-dom';
+import { useParams, Outlet } from 'react-router-dom';
 import { axiosInstance } from '../lib/axios';
 import { toast } from 'react-hot-toast';
 import ClassSidebar from '../components/SSidebar';
-import ClassInfo from '../s_class_components/Info';
-import ClassChat from '../s_class_components/Chat';
-import ClassAttendance from '../s_class_components/Attendance';
 import { useSAuthStore } from "../store/useSAuthStore";
-import AssignmentList from '../s_class_components/AssignmentList';
+import { createContext } from 'react';
 
+// ✅ Optional: Create context to avoid prop drilling
+export const ClassContext = createContext(null);
 
-const ClassDetails = () => {
+const SClassDetails = () => {
   const { classCode } = useParams();
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,25 +34,20 @@ const ClassDetails = () => {
   if (!classData) return <div className="p-6 text-center text-red-600">Class not found</div>;
 
   return (
-    <div className="h-[calc(100vh-4rem)] flex">
-      {/* Sidebar */}
-      <div className="w-64 h-full fixed top-16 left-0 z-30 bg-[#1c2c55] border-r border-gray-700">
-        <ClassSidebar />
-      </div>
+    <ClassContext.Provider value={{ classData, studentId: currentUser._id }}>
+      <div className="h-[calc(100vh-4rem)] flex">
+        {/* Sidebar */}
+        <div className="w-64 h-full fixed top-16 left-0 z-30 bg-[#1c2c55] border-r border-gray-700">
+          <ClassSidebar />
+        </div>
 
-      {/* Scrollable content area */}
-      <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
-        <Routes>
-          <Route path="/" element={<Navigate to="info" />} />
-          <Route path="info" element={<ClassInfo classData={classData} studentId={currentUser._id} />} />
-          <Route path="chat" element={<ClassChat classData={classData} />} />
-          <Route path="attendance" element={<ClassAttendance classId={classData._id} studentId={currentUser._id} />} />
-          <Route path="assignment" element={<AssignmentList/>}/>
-        </Routes>
+        {/* Outlet renders nested routes from App.jsx */}
+        <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </ClassContext.Provider>
   );
 };
 
-export default ClassDetails;
-
+export default SClassDetails;

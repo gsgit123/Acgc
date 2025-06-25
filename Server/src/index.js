@@ -30,22 +30,17 @@ app.use(cors({
 }))
 
 
-console.log("Mounting /api/sauth");
 app.use("/api/sauth", sauthRoutes);
 
-console.log("Mounting /api/tauth");
 app.use("/api/tauth", tauthRoutes);
 
-console.log("Mounting /api/class");
 app.use("/api/class", classRoutes);
 
-console.log("Mounting /api/attendance");
 app.use("/api/attendance", attendanceRoutes);
 
-console.log("Mounting /api/chat");
 app.use("/api/chat", chatRoutes);
 
-console.log("Mounting /api/assignments");
+
 app.use("/api/assignments", AssignmentRoutes);
 
 if(process.env.NODE_ENV==="production"){

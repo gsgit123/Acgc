@@ -1,49 +1,51 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { axiosInstance } from '../lib/axios';
 import { toast } from 'react-hot-toast';
 
 const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
-const ClassAttendance = ({ classData }) => {
+const ClassAttendance = () => {
+const { classData, teacherId } = useOutletContext();
   const [date, setDate] = useState(today);
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchAttendance = async () => {
-    setLoading(true);
-    try {
-      const res = await axiosInstance.get(`/attendance/class/${classData._id}/date/${date}`);
-      if (res.data.attendance.length === 0) {
-        setAttendance(
-          classData.students.map(student => ({
-            studentId: student._id,
-            fullName: student.fullName,
-            status: 'present'
-          }))
-        );
-      } else {
-        setAttendance(
-          classData.students.map(student => {
-            const record = res.data.attendance.find(a => a.student._id === student._id);
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchAttendance = async () => {
+      setLoading(true);
+      try {
+        const res = await axiosInstance.get(`/attendance/class/${classData._id}/date/${date}`);
+        const records = res.data.attendance;
+
+        if (isMounted) {
+          const newAttendance = classData.students.map(student => {
+            const record = records.find(a => a.student._id === student._id);
             return {
               studentId: student._id,
               fullName: student.fullName,
-              status: record ? record.status : 'present'
+              status: record ? record.status : 'present',
             };
-          })
-        );
+          });
+          setAttendance(newAttendance);
+        }
+      } catch (err) {
+        toast.error('Failed to fetch attendance');
+      } finally {
+        isMounted && setLoading(false);
       }
-    } catch (err) {
-      toast.error('Failed to fetch attendance');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchAttendance();
-    // eslint-disable-next-line
-  }, [date, classData._id]);
+    if (classData?._id) {
+      fetchAttendance();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [date, classData]);
 
   const handleStatusChange = (studentId, status) => {
     setAttendance(prev =>
@@ -53,15 +55,15 @@ const ClassAttendance = ({ classData }) => {
 
   const handleSave = async () => {
     try {
+      setLoading(true);
       await axiosInstance.post(`/attendance/class/${classData._id}/date/${date}`, {
-        attendance: attendance.map(a => ({
-          studentId: a.studentId,
-          status: a.status
-        }))
+        attendance: attendance.map(({ studentId, status }) => ({ studentId, status })),
       });
       toast.success('Attendance saved!');
     } catch {
       toast.error('Failed to save attendance');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -72,7 +74,7 @@ const ClassAttendance = ({ classData }) => {
 
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <label className="text-lg font-medium">
-            Select Date:{" "}
+            Select Date:
             <input
               type="date"
               value={date}
@@ -119,13 +121,13 @@ const ClassAttendance = ({ classData }) => {
 
         <div className="text-center mt-6">
           <button
+            onClick={handleSave}
+            disabled={loading}
             className={`px-6 py-2 rounded-md font-semibold transition ${
               loading
                 ? 'bg-gray-500 cursor-not-allowed'
                 : 'bg-sky-600 hover:bg-sky-700 text-white'
             }`}
-            onClick={handleSave}
-            disabled={loading}
           >
             {loading ? 'Saving...' : 'Save Attendance'}
           </button>

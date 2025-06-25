@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import { axiosInstance } from '../lib/axios';
-import { useParams } from 'react-router-dom';
-import { useTAuthStore } from '../store/useTAuthStore';
 import { Plus, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 const AssignmentUpload = () => {
+  const { classData, teacherId } = useOutletContext(); // 👈 Access from parent route
   const [form, setForm] = useState({ title: '', description: '', fileUrl: '', deadline: '' });
   const [assignments, setAssignments] = useState([]);
   const [submissionsMap, setSubmissionsMap] = useState({});
   const [showForm, setShowForm] = useState(false);
-
-  const { classCode } = useParams();
-  const currUser = useTAuthStore((state) => state.authUser);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axiosInstance.post('/assignments', {
         ...form,
-        classCode,
-        createdBy: currUser._id || currUser,
+        classCode: classData.classCode,
+        createdBy: teacherId,
       });
       setForm({ title: '', description: '', fileUrl: '', deadline: '' });
       setShowForm(false);
@@ -34,7 +31,7 @@ const AssignmentUpload = () => {
 
   const fetchAssignments = async () => {
     try {
-      const res = await axiosInstance.get(`/assignments/${classCode}`);
+      const res = await axiosInstance.get(`/assignments/${classData.classCode}`);
       setAssignments(res.data);
       const map = {};
       for (let assignment of res.data) {
@@ -48,8 +45,10 @@ const AssignmentUpload = () => {
   };
 
   useEffect(() => {
-    fetchAssignments();
-  }, [classCode]);
+    if (classData?.classCode) {
+      fetchAssignments();
+    }
+  }, [classData]);
 
   return (
     <div className="min-h-screen px-4 pt-10 pb-10 bg-[#0b0f19] text-white font-['Nunito']">
@@ -126,7 +125,7 @@ const AssignmentUpload = () => {
 
       {/* Assignment List */}
       <div className="max-w-4xl mx-auto mt-6">
-        <h3 className="text-2xl font-bold mb-4 text-sky-400">Assignments for {classCode}</h3>
+        <h3 className="text-2xl font-bold mb-4 text-sky-400">Assignments for {classData.classCode}</h3>
         {assignments.length === 0 ? (
           <p className="text-gray-400">No assignments uploaded yet.</p>
         ) : (
@@ -151,22 +150,21 @@ const AssignmentUpload = () => {
                 </a>
               )}
 
-
               <h5 className="mt-4 font-semibold text-sky-400">Submissions:</h5>
               {submissionsMap[assignment._id]?.length > 0 ? (
                 <ul className="list-disc list-inside text-white">
                   {submissionsMap[assignment._id].map((sub) => (
                     <li key={sub._id}>
                       {sub.studentId?.fullName || 'Unnamed'} —{' '}
-                      {sub.fileUrl&&(
+                      {sub.fileUrl && (
                         <a
-                        href={sub.fileUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-sky-300 underline"
-                      >
-                        View Submission
-                      </a>
+                          href={sub.fileUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sky-300 underline"
+                        >
+                          View Submission
+                        </a>
                       )}
                     </li>
                   ))}

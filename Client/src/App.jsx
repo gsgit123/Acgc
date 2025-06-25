@@ -17,6 +17,17 @@ import TClassDetails from './pages/TClassDetails.jsx'
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 
+
+import SClassInfo from './s_class_components/Info.jsx'
+import SClassChat from './s_class_components/Chat.jsx'
+import SClassAttendance from './s_class_components/Attendance.jsx'
+import SAssignmentList from './s_class_components/AssignmentList.jsx'
+
+import TClassInfo from './t_class_components/Info.jsx'
+import TClassChat from './t_class_components/Chat.jsx'
+import TClassAttendance from './t_class_components/Attendance.jsx'
+import TClassAssignmentUpload from './t_class_components/AssignmentUpload.jsx'
+
 import './App.css'
 
 const App = () => {
@@ -76,24 +87,37 @@ const App = () => {
 
   return (
     <div className="bg-[#0b0f19] min-h-screen text-white font-['Nunito'] pt-16">
-  <Navbar />
-  
-  <div className="px-4">
-    <Routes>
-      <Route path='/' element={<LandingPage />} />
-      <Route path='/LoginPageStudent' element={!studentUser ? <LoginPageStudent /> : <Navigate to='/studentDash' />} />
-      <Route path='/SignupPageStudent' element={!studentUser ? <SignupPageStudent /> : <Navigate to='/studentDash' />} />
-      <Route path='/studentDash' element={studentUser ? <StudentDashboard /> : <Navigate to='/LoginPageStudent' />} />
-      <Route path='/LoginPageTeacher' element={!teacherUser ? <LoginPageTeacher /> : <Navigate to='/teacherDash' />} />
-      <Route path='/SignupPageTeacher' element={!teacherUser ? <SignupPageTeacher /> : <Navigate to='/teacherDash' />} />
-      <Route path='/teacherDash' element={teacherUser ? <TeacherDashboard /> : <Navigate to='/LoginPageTeacher' />} />
-      <Route path='/class/student/:classCode/*' element={studentUser ? <SClassDetails /> : <Navigate to='/LoginPageStudent' />} />
-      <Route path='/class/teacher/:classCode/*' element={teacherUser ? <TClassDetails /> : <Navigate to='/LoginPageTeacher' />} />
-    </Routes>
-  </div>
+      <Navbar />
 
-  <Toaster />
-</div>
+      <div className="px-4">
+        <Routes>
+          <Route path='/' element={<LandingPage />} />
+          <Route path='/LoginPageStudent' element={!studentUser ? <LoginPageStudent /> : <Navigate to='/studentDash' />} />
+          <Route path='/SignupPageStudent' element={!studentUser ? <SignupPageStudent /> : <Navigate to='/studentDash' />} />
+          <Route path='/studentDash' element={studentUser ? <StudentDashboard /> : <Navigate to='/LoginPageStudent' />} />
+          <Route path='/LoginPageTeacher' element={!teacherUser ? <LoginPageTeacher /> : <Navigate to='/teacherDash' />} />
+          <Route path='/SignupPageTeacher' element={!teacherUser ? <SignupPageTeacher /> : <Navigate to='/teacherDash' />} />
+          <Route path='/teacherDash' element={teacherUser ? <TeacherDashboard /> : <Navigate to='/LoginPageTeacher' />} />
+          <Route path='/class/student/:classCode' element={studentUser ? <SClassDetails /> : <Navigate to='/LoginPageStudent' />}>
+            <Route index element={<Navigate to="info" />} />
+            <Route path="info" element={<SClassInfo />} />
+            <Route path="chat" element={<SClassChat />} />
+            <Route path="attendance" element={<SClassAttendance />} />
+            <Route path="assignment" element={<SAssignmentList />} />
+          </Route>
+
+          <Route path='/class/teacher/:classCode' element={teacherUser ? <TClassDetails /> : <Navigate to='/LoginPageTeacher' />}>
+            <Route index element={<Navigate to="info" />} />
+            <Route path="info" element={<TClassInfo />} />
+            <Route path="chat" element={<TClassChat />} />
+            <Route path="attendance" element={<TClassAttendance />} />
+            <Route path="assignment" element={<TClassAssignmentUpload />} />
+          </Route>        
+          </Routes>
+      </div>
+
+      <Toaster />
+    </div>
 
   )
 }

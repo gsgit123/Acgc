@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { axiosInstance } from '../lib/axios';
-import { useParams } from 'react-router-dom';
-import { useSAuthStore } from '../store/useSAuthStore';
+import { ClassContext } from '../pages/SClassDetails';
 
 const AssignmentList = () => {
+  const { classData, studentId } = useContext(ClassContext);
   const [assignments, setAssignments] = useState([]);
   const [submitted, setSubmitted] = useState({});
-  const { classCode } = useParams();
-  const student = useSAuthStore((state) => state.authUser);
+  const [tempUrls, setTempUrls] = useState({});
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axiosInstance.get(`/assignments/${classCode}`);
+        const res = await axiosInstance.get(`/assignments/${classData.classCode}`);
         setAssignments(res.data);
 
         const subs = {};
         for (let a of res.data) {
           const sub = await axiosInstance.get(`/assignments/submissions/${a._id}`);
-          const match = sub.data.find((s) => s.studentId._id === student._id);
+          const match = sub.data.find((s) => s.studentId._id === studentId);
           if (match) subs[a._id] = true;
         }
         setSubmitted(subs);
@@ -26,11 +25,13 @@ const AssignmentList = () => {
         console.error('Error fetching assignments:', err);
       }
     };
-    fetch();
-  }, [classCode, student._id]);
 
-  const handleSubmit = async (assignmentId, fileUrl) => {
-    if (!fileUrl || fileUrl.trim() === '') {
+    if (classData?.classCode && studentId) fetch();
+  }, [classData?.classCode, studentId]);
+
+  const handleSubmit = async (assignmentId) => {
+    const fileUrl = tempUrls[assignmentId]?.trim();
+    if (!fileUrl) {
       alert('Please provide a valid file URL');
       return;
     }
@@ -38,7 +39,7 @@ const AssignmentList = () => {
     try {
       await axiosInstance.post('/assignments/submit', {
         assignmentId,
-        studentId: student._id,
+        studentId,
         fileUrl,
       });
       alert('Submitted!');
@@ -47,6 +48,10 @@ const AssignmentList = () => {
       console.error('Submission failed:', err);
       alert('Submission failed');
     }
+  };
+
+  const handleInputChange = (id, value) => {
+    setTempUrls((prev) => ({ ...prev, [id]: value }));
   };
 
   return (
@@ -68,7 +73,7 @@ const AssignmentList = () => {
                 Deadline: {a.deadline ? a.deadline.slice(0, 10) : 'No deadline'}
               </p>
 
-              {a.fileUrl && a.fileUrl.trim() !== '' && (
+              {a.fileUrl?.trim() && (
                 <a
                   href={a.fileUrl}
                   target="_blank"
@@ -87,10 +92,11 @@ const AssignmentList = () => {
                     type="text"
                     placeholder="Submission File URL"
                     className="w-full bg-[#0f172a] border border-gray-600 text-white px-4 py-2 rounded-md mb-2 focus:outline-none focus:ring focus:ring-sky-500"
-                    onChange={(e) => (a.tempUrl = e.target.value)}
+                    onChange={(e) => handleInputChange(a._id, e.target.value)}
+                    value={tempUrls[a._id] || ''}
                   />
                   <button
-                    onClick={() => handleSubmit(a._id, a.tempUrl)}
+                    onClick={() => handleSubmit(a._id)}
                     className="bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-md font-bold"
                   >
                     Submit

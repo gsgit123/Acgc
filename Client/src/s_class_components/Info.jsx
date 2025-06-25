@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { ClassContext } from '../pages/SClassDetails'; // <-- import the context
 
-const ClassInfo = ({ classData, studentId }) => {
+const ClassInfo = () => {
+  const { classData, studentId } = useContext(ClassContext); // ✅ get data from context
   const [pendingCount, setPendingCount] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,7 @@ const ClassInfo = ({ classData, studentId }) => {
   }, [classData, studentId]);
 
   return (
-    <div className=" inset-0 w-full h-full bg-[#0b0f19] text-white font-['Nunito'] flex items-center justify-center px-4 overflow-hidden">
+    <div className="inset-0 w-full h-full bg-[#0b0f19] text-white font-['Nunito'] flex items-center justify-center px-4 overflow-hidden">
       <div className="bg-[#1e293b] rounded-xl shadow-2xl p-10 w-full max-w-3xl transition hover:shadow-emerald-500/30 hover:ring-2 hover:ring-emerald-500">
         <h1 className="text-4xl font-bold text-emerald-400 mb-4">{classData.name}</h1>
         <p className="text-sm text-gray-400 mb-6">Student View</p>

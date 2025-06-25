@@ -1,12 +1,10 @@
-import React from 'react'
-import { axiosInstance } from '../lib/axios.js'
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-
-
+import React, { useEffect, useState, useContext } from 'react';
+import { axiosInstance } from '../lib/axios.js';
+import { ClassContext } from '../pages/TClassDetails';
 
 const Info = () => {
-  const { classCode } = useParams();
+  const { classData } = useContext(ClassContext);
+  const classCode = classData?.classCode;
 
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,20 +15,19 @@ const Info = () => {
       try {
         const res = await axiosInstance.get(`/attendance/class/${classCode}/students`);
         setStudents(res.data.students || []);
-
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to fetch students');
-
       } finally {
         setLoading(false);
       }
     };
-    fetchStudents();
+
+    if (classCode) fetchStudents();
   }, [classCode]);
+
   return (
     <div className="h-full px-4 pt-10 bg-[#0b0f19] text-white font-['Nunito']">
       <div className="max-w-4xl mx-auto rounded-xl shadow-2xl bg-[#0f172a] border border-gray-700 overflow-y-auto">
-
         <div className="text-center text-3xl font-bold text-sky-400 py-6 border-b border-gray-700">
           Enrolled Students 📋
         </div>
@@ -63,21 +60,19 @@ const Info = () => {
                     <td className="px-4 py-3 border-b border-gray-700 text-white text-center">{student.daysPresent}</td>
                     <td className="px-4 py-3 border-b border-gray-700 text-white text-center">{student.totalDays}</td>
                     <td className={`px-4 py-3 border-b border-gray-700 text-center font-semibold ${
-                      parseFloat(student.attendancePercentage)<75?"text-red-500":"text-green-400"
+                      parseFloat(student.attendancePercentage) < 75 ? "text-red-500" : "text-green-400"
                     }`}>
                       {student.attendancePercentage === 'N/A' ? 'N/A' : `${student.attendancePercentage}%`}
                     </td>
                   </tr>
                 ))}
               </tbody>
-
-
             </table>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default Info
+export default Info;

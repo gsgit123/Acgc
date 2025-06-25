@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect, useState, createContext } from 'react';
+import { useParams, Outlet } from 'react-router-dom';
 import { axiosInstance } from '../lib/axios';
 import { toast } from 'react-hot-toast';
 import ClassSidebar from '../components/TSidebar';
-import ClassInfo from '../t_class_components/Info';
-import ClassChat from '../t_class_components/Chat';
-import ClassAttendance from '../t_class_components/Attendance';
-import AssignmentUpload from '../t_class_components/AssignmentUpload';
+import { useTAuthStore } from '../store/useTAuthStore';
 
+// ✅ Context to share classData and teacherId
+export const ClassContext = createContext();
 
-const ClassDetails = () => {
+const TClassDetails = () => {
   const { classCode } = useParams();
   const [classData, setClassData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const currentUser = useTAuthStore((state) => state.authUser);
 
   const fetchClassDetails = async () => {
     try {
@@ -33,24 +33,20 @@ const ClassDetails = () => {
   if (!classData) return <div className="p-6 text-center text-red-600">Class not found</div>;
 
   return (
-    <div className=" h-[calc(100vh-4rem)] flex">
-      {/* Sidebar */}
-      <div className="w-64 h-full fixed top-16 left-0 z-30 bg-[#1c2c55] border-r border-gray-700">
-        <ClassSidebar />
-      </div>
+    <ClassContext.Provider value={{ classData, teacherId: currentUser._id }}>
+      <div className="h-[calc(100vh-4rem)] flex">
+        {/* Sidebar */}
+        <div className="w-64 h-full fixed top-16 left-0 z-30 bg-[#1c2c55] border-r border-gray-700">
+          <ClassSidebar />
+        </div>
 
-      {/* Scrollable content area */}
-      <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
-        <Routes>
-          <Route path="/" element={<Navigate to="info" />} />
-          <Route path="info" element={<ClassInfo />} />
-          <Route path="chat" element={<ClassChat classData={classData} />} />
-          <Route path="attendance" element={<ClassAttendance classData={classData} />} />
-          <Route path="assignment" element={<AssignmentUpload/>}/>
-        </Routes>
+        {/* Scrollable content area */}
+        <div className="ml-64 flex-1 h-full overflow-y-auto bg-[#0f172a] text-white">
+          <Outlet context={{ classData, teacherId: currentUser._id }} />
+        </div>
       </div>
-    </div>
+    </ClassContext.Provider>
   );
 };
 
-export default ClassDetails;
+export default TClassDetails;
