@@ -8,13 +8,16 @@ const ClassInfo = () => {
   const [pendingCount, setPendingCount] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  console.log(classData);
+  console.log(studentId);
 
   useEffect(() => {
     const fetchPendingAssignments = async () => {
       try {
-        const res = await axios.get(
+        const res = await axiosInstance.get(
           `/assignments/pending/${classData.classCode}/${studentId}`
         );
+        console.log("res ",res.data);
         setPendingCount(res.data.count);
       } catch (err) {
         console.error('Error fetching pending assignments:', err);
