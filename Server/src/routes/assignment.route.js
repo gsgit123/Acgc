@@ -25,11 +25,6 @@ router.post('/', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-router.get('/:classCode', async (req, res) => {
-  const assignments = await Assignment.find({ classCode: req.params.classCode }).sort({ createdAt: -1 });
-  res.json(assignments);
-});
-
 
 router.post('/submit', async (req, res) => {
   const { assignmentId, studentId, fileUrl } = req.body;
@@ -43,28 +38,12 @@ router.post('/submit', async (req, res) => {
     console.log(error)
   }
 });
-
 router.get('/submissions/:assignmentId', async (req, res) => {
   const submissions = await Submission.find({ assignmentId: req.params.assignmentId }).populate('studentId', 'fullName');
   res.json(submissions);
 });
 
-router.delete('/:assignmentId',async(req,res)=>{
-  try{
-    const {assignmentId}=req.params;
-    await Submission.deleteMany({assignmentId});
-    await Assignment.findByIdAndDelete(assignmentId);
-    res.status(200).json({ message: 'Assignment and its submissions deleted' });
 
-
-  }
-  catch(error){
-    console.log(error, "delete fail");
-    res.status(500).json({error:"failed to delete"})
-  }
-})
-
-// Route: Get pending assignments for a student in a class
 router.get('/pending/:classCode/:studentId', async (req, res) => {
   const { classCode, studentId } = req.params;
 
@@ -94,5 +73,29 @@ router.get('/pending/:classCode/:studentId', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch pending assignments' });
   }
 });
+router.get('/:classCode', async (req, res) => {
+  const assignments = await Assignment.find({ classCode: req.params.classCode }).sort({ createdAt: -1 });
+  res.json(assignments);
+});
+
+
+
+
+
+router.delete('/:assignmentId',async(req,res)=>{
+  try{
+    const {assignmentId}=req.params;
+    await Submission.deleteMany({assignmentId});
+    await Assignment.findByIdAndDelete(assignmentId);
+    res.status(200).json({ message: 'Assignment and its submissions deleted' });
+
+
+  }
+  catch(error){
+    console.log(error, "delete fail");
+    res.status(500).json({error:"failed to delete"})
+  }
+})
+
 
 export default router;

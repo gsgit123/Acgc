@@ -30,12 +30,23 @@ app.use(cors({
 }))
 
 
-app.use("/api/sauth",sauthRoutes)
-app.use("/api/tauth",tauthRoutes)
-app.use("/api/class",classRoutes)
-app.use('/api/attendance', attendanceRoutes);
-app.use("/api/chat",chatRoutes);
-app.use("/api/assignments",AssignmentRoutes)
+console.log("Mounting /api/sauth");
+app.use("/api/sauth", sauthRoutes);
+
+console.log("Mounting /api/tauth");
+app.use("/api/tauth", tauthRoutes);
+
+console.log("Mounting /api/class");
+app.use("/api/class", classRoutes);
+
+console.log("Mounting /api/attendance");
+app.use("/api/attendance", attendanceRoutes);
+
+console.log("Mounting /api/chat");
+app.use("/api/chat", chatRoutes);
+
+console.log("Mounting /api/assignments");
+app.use("/api/assignments", AssignmentRoutes);
 
 if(process.env.NODE_ENV==="production"){
     app.use(express.static(path.join(__dirname,"../frontend/dist")));
