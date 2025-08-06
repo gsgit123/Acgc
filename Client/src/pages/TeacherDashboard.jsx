@@ -44,6 +44,18 @@ const TeacherDashboard = () => {
       setLoading(false);
     }
   };
+  const handleDeleteClass = async (classCode) => {
+    if (!window.confirm("Are you sure you want to delete this class and all its data?")) return;
+
+    try {
+      await axiosInstance.delete(`/class/deleteByCode/${classCode}`);
+      toast.success("Class deleted successfully!");
+      fetchClasses(); // refresh class list
+    } catch (err) {
+      console.error("Error deleting class:", err);
+      toast.error(err.response?.data?.message || "Failed to delete class");
+    }
+  };
 
   return (
     <div className="relative p-6  max-w-7xl mx-auto text-white font-['Nunito'] min-h-[calc(100vh-64px)]  bg-[#0b0f19] pt-5">
@@ -109,21 +121,31 @@ const TeacherDashboard = () => {
         {classes.map((cls) => (
           <div
             key={cls._id}
-            onClick={() => navigate(`/class/teacher/${cls.classCode}`)}
-            className="cursor-pointer bg-[#1e293b] rounded-xl shadow-lg p-6 hover:shadow-emerald-600/40 hover:ring-2 hover:ring-emerald-500 transition"
+            className="relative bg-[#1e293b] rounded-xl shadow-lg p-6 hover:shadow-emerald-600/40 hover:ring-2 hover:ring-emerald-500 transition"
           >
-            <h4 className="text-xl font-bold mb-2 text-emerald-300">{cls.name}</h4>
-            <p className="text-gray-300">
-              <span className="font-medium text-white">Subject:</span> {cls.subject}
-            </p>
-            <p className="text-gray-300">
-              <span className="font-medium text-white">Class Code:</span> {cls.classCode}
-            </p>
-            <p className="text-gray-300">
-              <span className="font-medium text-white">Students:</span> {cls.students?.length || 0}
-            </p>
+            <button
+              onClick={() => handleDeleteClass(cls.classCode)}
+              className="absolute top-3 right-3 text-red-400 hover:text-red-600 transition"
+              title="Delete Class"
+            >
+              <X size={20} />
+            </button>
+
+            <div onClick={() => navigate(`/class/teacher/${cls.classCode}`)} className="cursor-pointer">
+              <h4 className="text-xl font-bold mb-2 text-emerald-300">{cls.name}</h4>
+              <p className="text-gray-300">
+                <span className="font-medium text-white">Subject:</span> {cls.subject}
+              </p>
+              <p className="text-gray-300">
+                <span className="font-medium text-white">Class Code:</span> {cls.classCode}
+              </p>
+              <p className="text-gray-300">
+                <span className="font-medium text-white">Students:</span> {cls.students?.length || 0}
+              </p>
+            </div>
           </div>
         ))}
+
       </div>
     </div>
   );

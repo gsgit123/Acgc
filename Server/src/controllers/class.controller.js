@@ -1,4 +1,10 @@
-import Class from "../models/class.model.js";
+import Class from '../models/class.model.js';
+import Assignment from '../models/assignment.model.js';
+import Submission from '../models/submission.model.js';
+import Attendance from '../models/attendance.model.js';
+import Student from '../models/student.model.js';
+import Message from '../models/message.model.js';
+
 
 
 function generateClassCode() {
@@ -115,6 +121,46 @@ export const getStudentClasses = async (req, res) => {
     return res.status(200).json({ class: classData });
   } catch (error) {
     console.error("Error fetching class by code:", error.message);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const deleteClass = async (req, res) => {
+  const { code } = req.params;
+
+  try {
+    // 1. Find class by classCode
+    const foundClass = await Class.findOne({ classCode: code });
+
+    if (!foundClass) {
+      return res.status(404).json({ message: "Class not found" });
+    }
+
+    const classCode = foundClass.classCode;
+    const classId = foundClass._id;
+
+    // 2. Find and delete assignments
+    const assignments = await Assignment.find({ classCode });
+    const assignmentIds = assignments.map(a => a._id);
+
+    await Submission.deleteMany({ assignmentId: { $in: assignmentIds } });
+    await Assignment.deleteMany({ classCode });
+
+    // 3. Delete attendance (if referencing classId)
+    await Attendance.deleteMany({ class: classId });
+
+    // 4. Delete messages (if referencing classId)
+    await Message.deleteMany({ classId });
+
+    // 5. Remove classCode from students’ classList (if applicable)
+    await Student.updateMany({}, { $pull: { classList: classCode } });
+
+    // 6. Delete class itself
+    await Class.deleteOne({ _id: classId });
+
+    return res.status(200).json({ message: "Class and all related data deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting class:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
